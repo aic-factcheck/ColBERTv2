@@ -1,0 +1,23 @@
+#!/bin/bash
+#SBATCH --time=4:00:00
+#SBATCH --nodes=1 --cpus-per-task=4
+#SBATCH --mem=128G
+#SBATCH --partition=amdgpufast --gres=gpu:1
+#SBATCH --job-name idx-colbert
+#SBATCH --out=../logs/colbert_02_build_index.%j.out
+
+# if PROJECT_DIR is not defined, then expect we are in ${PROJECT_DIR}/slurm
+if [[ -z "${PROJECT_DIR}" ]]; then
+    export PROJECT_DIR="$(dirname "$(pwd)")"
+fi
+
+cd ${PROJECT_DIR}
+
+ml Anaconda3
+eval "$(conda shell.bash hook)"
+conda activate colbert
+
+export PYTHONPATH=.:$PYTHONPATH
+CFG=/home/drchajan/devel/python/FC/ColBERTv2/cfg/index/wiki_cs/index.config.py
+python scripts/build_index.py $CFG
+

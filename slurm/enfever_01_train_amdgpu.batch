@@ -1,0 +1,34 @@
+#!/bin/bash
+#SBATCH --time=24:00:00
+#SBATCH --nodes=1 --cpus-per-task=4
+#SBATCH --mem=128G
+#SBATCH --partition=amdgpu --gres=gpu:1
+#SBATCH --job-name enfever_01_colbert_train
+#SBATCH --out=../logs/enfever_01_colbert_train.%j.out
+
+echo running on: $SLURM_JOB_NODELIST
+
+# if PROJECT_DIR is not defined, then expect we are in ${PROJECT_DIR}/slurm
+if [[ -z "${PROJECT_DIR}" ]]; then
+    export PROJECT_DIR="$(dirname "$(pwd)")"
+fi
+
+if [ -f "${PROJECT_DIR}/init_environment_hflarge_amd.sh" ]; then
+    source "${PROJECT_DIR}/init_environment_hflarge_amd.sh"
+fi
+
+cd ${PROJECT_DIR}
+pwd
+
+ml GCC/11.2.0
+
+# only for XLMR - slow!
+export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
+
+export PYTHONPATH=.:$PYTHONPATH
+# CFG=cfg/train/enfever/train_nway.config.py
+# CFG=cfg/train/enfever/train_nway128.config.py
+# CFG=cfg/train/enfever/train_nway_ev.config.py
+# CFG=cfg/train/enfever/train_normal+fake_f2_nway.config.py
+CFG=cfg/train/enfever/train_final.config.py
+python scripts/train.py $CFG

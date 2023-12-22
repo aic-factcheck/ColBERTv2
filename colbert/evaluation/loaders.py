@@ -2,6 +2,7 @@ import os
 import ujson
 import torch
 import random
+import unicodedata
 
 from collections import defaultdict, OrderedDict
 
@@ -26,6 +27,29 @@ def load_queries(queries_path):
             queries[qid] = query
 
     print_message("#> Got", len(queries), "queries. All QIDs are unique.\n")
+
+    return queries
+
+
+def load_queries_jsonl(queries_path, key="query"):
+    # dhonza
+    queries = OrderedDict()
+    nfc = True
+
+    print_message("#> Loading JSONL queries from", queries_path, "...")
+
+    with open(queries_path, 'r', encoding='utf8') as f:
+        for qid, line in enumerate(f):
+            # unlike in TSV import, we assert qid based on line number   
+            # original MS-MARCO is NFC encoded Unicode so check
+            query = ujson.loads(line)[key]
+            if nfc and unicodedata.normalize("NFC", query) != query:
+                nfc = False
+            queries[qid] = query
+
+    print_message(f"#> Got {len(queries)} queries. All QIDs are unique.\n")
+    if not nfc:
+        print_message(f"#> WARNING: not NFC encoded unicode: {queries_path}\n")
 
     return queries
 
@@ -170,6 +194,37 @@ def load_collection(collection_path):
                 passage = title + ' | ' + passage
 
             collection.append(passage)
+
+    print()
+
+    return collection
+
+def load_collection_jsonl(collection_path):
+    # dhonza
+    print_message("#> Loading collection from JSONL...")
+
+    collection = []
+    nfc = True
+    with open(collection_path, 'r', encoding='utf8') as f:
+        for line_idx, line in enumerate(f):
+            if line_idx % (1000*1000) == 0:
+                print(f'{line_idx // 1000 // 1000}M', end=' ', flush=True)
+
+            rec = ujson.loads(line)
+
+            if "title" in rec:
+                passage = rec["title"] + ' | ' + rec["text"]
+            else:
+                passage = rec["text"]
+            
+            # original MS-MARCO is NFC encoded Unicode so check
+            if nfc and unicodedata.normalize("NFC", passage) != passage:
+                nfc = False
+
+            collection.append(passage)
+
+        if not nfc:
+            print_message(f"#> WARNING: not NFC encoded unicode: {collection_path}\n")
 
     print()
 

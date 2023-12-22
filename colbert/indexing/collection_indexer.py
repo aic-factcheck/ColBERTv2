@@ -101,6 +101,7 @@ class CollectionIndexer():
         # Select the number of partitions
         num_passages = len(self.collection)
         self.num_embeddings_est = num_passages * avg_doclen_est
+
         self.num_partitions = int(2 ** np.floor(np.log2(16 * np.sqrt(self.num_embeddings_est))))
 
         Run().print_main(f'Creaing {self.num_partitions:,} partitions.')
@@ -161,10 +162,16 @@ class CollectionIndexer():
 
                 nonzero_ranks = torch.tensor([float(len(local_sample) > 0)]).cpu()
 
+        Run().print(f'initial avg_doclen_est = {avg_doclen_est}') # dhonza
         avg_doclen_est = avg_doclen_est.item() / nonzero_ranks.item()
         self.avg_doclen_est = avg_doclen_est
 
+        Run().print(f'num_sample_embs = {self.num_sample_embs}')
+        Run().print(f'len(doclens) = {len(doclens)}') # dhonza
+        Run().print(f'sum(doclens) = {sum(doclens)}') # dhonza
+        Run().print(f'nonzero_ranks = {nonzero_ranks}') # dhonza
         Run().print(f'avg_doclen_est = {avg_doclen_est} \t len(local_sample) = {len(local_sample):,}')
+        assert avg_doclen_est > 0.0 # dhonza
 
         torch.save(local_sample_embs.half(), os.path.join(self.config.index_path_, f'sample.{self.rank}.pt'))
 

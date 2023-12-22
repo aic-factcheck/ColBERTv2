@@ -1,0 +1,5 @@
+{
+    "index_name": "/mnt/data/factcheck/wiki/en/20230220/colbertv2/indexes/enwiki-20230220-paragraphs.2bits",
+    "lineno2id_mapping": "/mnt/data/factcheck/wiki/en/20230220/paragraphs/enwiki-20230220-paragraphs_lineno2id.json",
+    "port": 8051
+}

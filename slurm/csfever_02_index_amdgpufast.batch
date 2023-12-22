@@ -1,0 +1,40 @@
+#!/bin/bash
+#SBATCH --time=4:00:00
+#SBATCH --nodes=1 --cpus-per-task=4
+#SBATCH --mem=128G
+#SBATCH --partition=amdgpufast --gres=gpu:1
+#SBATCH --job-name csfever_02_colbert_index
+#SBATCH --out=../logs/csfever_02_colbert_index.%j.out
+
+echo running on: $SLURM_JOB_NODELIST
+
+# if PROJECT_DIR is not defined, then expect we are in ${PROJECT_DIR}/slurm
+if [[ -z "${PROJECT_DIR}" ]]; then
+    export PROJECT_DIR="$(dirname "$(pwd)")"
+fi
+
+if [ -f "${PROJECT_DIR}/init_environment_hflarge_amd.sh" ]; then
+    source "${PROJECT_DIR}/init_environment_hflarge_amd.sh"
+fi
+
+cd ${PROJECT_DIR}
+pwd
+
+ml GCC/11.2.0
+
+export PYTHONPATH=.:$PYTHONPATH
+# CFG=cfg/index/csfever/index_csfever.config.py
+# CFG=cfg/index/csfever/index_csfever_nway128.config.py
+# CFG=cfg/index/csfever/index_csfever_l2.config.py
+# CFG=cfg/index/csfever/index_wiki_cs.config.py
+# CFG=cfg/index/csfever/index_wiki_cs_nway128.config.py
+# CFG=cfg/index/csfever/index_wiki_all_to_csfever.config.py
+# CFG=cfg/index/csfever/index_csfever_nway_ev.config.py
+# CFG=cfg/index/csfever/index_csfever_nway_ev_to_wiki_cs.config.py
+# CFG=cfg/index/csfever/index_csfever_normal+fake_f3.config.py
+# CFG=cfg/index/csfever/index_csfever_normal+fake_f3_to_wiki_cs.config.py
+# CFG=cfg/index/csfever/index_final_csfever.config.py
+CFG=cfg/index/csfever/index_final_qacg_sum.config.py
+# CFG=cfg/index/csfever/index_final_qacg_mix.config.py
+python scripts/build_index.py $CFG
+

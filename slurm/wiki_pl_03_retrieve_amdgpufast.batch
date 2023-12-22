@@ -1,0 +1,37 @@
+#!/bin/bash
+#SBATCH --time=4:00:00
+#SBATCH --nodes=1 --cpus-per-task=4
+#SBATCH --mem=64G
+#SBATCH --partition=amdgpufast --gres=gpu:1
+#SBATCH --job-name wiki_pl_03_colbert_retrieve
+#SBATCH --out=../logs/wiki_pl_03_colbert_retrieve.%j.out
+
+# if PROJECT_DIR is not defined, then expect we are in ${PROJECT_DIR}/slurm
+if [[ -z "${PROJECT_DIR}" ]]; then
+    export PROJECT_DIR="$(dirname "$(pwd)")"
+fi
+
+if [ -f "${PROJECT_DIR}/init_environment_hflarge_amd.sh" ]; then
+    source "${PROJECT_DIR}/init_environment_hflarge_amd.sh"
+fi
+
+cd ${PROJECT_DIR}
+pwd
+
+ml GCC/11.2.0
+
+export PYTHONPATH=.:$PYTHONPATH
+# CFG=cfg/retrieve/wiki_pl/retrieve_qacg.config.py
+# CFG=cfg/retrieve/wiki_pl/retrieve_qacg_combined.config.py
+# CFG=cfg/retrieve/wiki_pl/retrieve_qacg_nway128.config.py
+# CFG=cfg/retrieve/wiki_pl/retrieve_qacg_combined_nway128.config.py
+# CFG=cfg/retrieve/wiki_pl/retrieve_qacg_sum.config.py
+# CFG=cfg/retrieve/wiki_pl/retrieve_qacg_sum_nway128.config.py
+CFG=cfg/retrieve/wiki_pl/retrieve_final_qacg_sum.config.py
+# CFG=cfg/retrieve/wiki_pl/retrieve_final_qacg_mix.config.py
+# CFG=cfg/retrieve/wiki_pl/retrieve_final_qacg_pl.config.py
+python scripts/retrieve.py $CFG
+
+
+
+    

@@ -1,0 +1,38 @@
+#!/bin/bash
+#SBATCH --time=24:00:00
+#SBATCH --nodes=1 --ntasks-per-node=1 --cpus-per-task=4
+#SBATCH --partition=amd
+#SBATCH --mem=64G
+#SBATCH --out=../logs/jupyter.%j.out
+
+# if PROJECT_DIR is not defined, then expect we are in ${PROJECT_DIR}/slurm
+if [[ -z "${PROJECT_DIR}" ]]; then
+    export PROJECT_DIR="$(dirname "$(pwd)")"
+fi
+
+cd ${PROJECT_DIR}
+
+ml Anaconda3
+eval "$(conda shell.bash hook)"
+conda activate colbert_cpu
+
+XDG_RUNTIME_DIR=""
+port=$(shuf -i8000-9999 -n1)
+node=$(hostname -s)
+user=$(whoami)
+
+# print tunneling instructions jupyter-log
+echo -e "
+MacOS or linux terminal command to create your ssh tunnel for Jupyter and for Dash app on 8050:
+ssh -N -L ${port}:${node}:${port} ${user}@login.rci.cvut.cz
+
+with additional port:
+ssh -N -L ${port}:${node}:${port} -L 8050:${node}:8050 ${user}@login.rci.cvut.cz
+
+Use a Browser on your local machine to go to:
+localhost:${port}  (prefix w/ https:// if using password)
+"
+export PYTHONPATH=.:/home/drchajan/devel/python/FC/drchajan/src:/home/drchajan/devel/python/FC/fever-baselines/src:$PYTHONPATH
+jupyter-lab --no-browser --port=${port} --ip=${node} --NotebookApp.iopub_data_rate_limit=1.0e10 --ServerApp.iopub_msg_rate_limit=1.0e10
+
+

@@ -1,0 +1,5 @@
+{
+    "index_name": "/mnt/data/factcheck/wiki/cs/20230220/colbertv2/qacg/indices/bert-base-multilingual-cased/nway32_anserini_230808_173413/colbert/2bits",
+    "lineno2id_mapping": "/mnt/data/factcheck/wiki/cs/20230220/paragraphs/cswiki-20230220-paragraphs_lineno2id.json",
+    "port": 8050
+}

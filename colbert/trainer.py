@@ -6,11 +6,15 @@ from colbert.training.training import train
 
 
 class Trainer:
-    def __init__(self, triples, queries, collection, config=None):
+    def __init__(self, triples, queries, eval_triples, eval_queries, collection, config=None):
+        print(f"Trainer Run().config:\n{Run().config}")
         self.config = ColBERTConfig.from_existing(config, Run().config)
+        print(f"Trainer self.config:\n{self.config}")
 
         self.triples = triples
         self.queries = queries
+        self.eval_triples = eval_triples
+        self.eval_queries = eval_queries
         self.collection = collection
 
     def configure(self, **kw_args):
@@ -23,13 +27,17 @@ class Trainer:
 
         # Resources don't come from the config object. They come from the input parameters.
         # TODO: After the API stabilizes, make this "self.config.assign()" to emphasize this distinction.
-        self.configure(triples=self.triples, queries=self.queries, collection=self.collection)
+        self.configure(triples=self.triples, queries=self.queries, 
+                       eval_triples=self.eval_triples, eval_queries=self.eval_queries, 
+                       collection=self.collection)
         self.configure(checkpoint=checkpoint)
 
         launcher = Launcher(train)
 
-        self._best_checkpoint_path = launcher.launch(self.config, self.triples, self.queries, self.collection)
-
+        self._best_checkpoint_path = launcher.launch(self.config, 
+                                                     self.triples, self.queries, 
+                                                     self.eval_triples, self.eval_queries, 
+                                                     self.collection)
 
     def best_checkpoint_path(self):
         return self._best_checkpoint_path

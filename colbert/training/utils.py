@@ -1,4 +1,5 @@
 import os
+import shutil
 import torch
 
 # from colbert.utils.runs import Run
@@ -12,7 +13,7 @@ def print_progress(scores):
     print("#>>>   ", positive_avg, negative_avg, '\t\t|\t\t', positive_avg - negative_avg)
 
 
-def manage_checkpoints(args, colbert, optimizer, batch_idx, savepath=None, consumed_all_triples=False):
+def manage_checkpoints(args, colbert, optimizer, batch_idx, savepath=None, consumed_all_triples=False, best_eval=False, early_stop=False):
     # arguments = dict(args)
 
     # TODO: Call provenance() on the values that support it??
@@ -39,6 +40,14 @@ def manage_checkpoints(args, colbert, optimizer, batch_idx, savepath=None, consu
         # name = os.path.join(path, "colbert-{}.dnn".format(batch_idx))
         # save_checkpoint(name, 0, batch_idx, colbert, optimizer, arguments)
         path_save = os.path.join(checkpoints_path, f"colbert-{batch_idx}")
+
+    if best_eval:
+        path_save = os.path.join(checkpoints_path, f"colbert-best_eval")
+        if os.path.exists(path_save):
+            shutil.rmtree(path_save)
+
+    if early_stop:
+        return os.path.join(checkpoints_path, f"colbert-best_eval")
 
     if path_save:
         print(f"#> Saving a checkpoint to {path_save} ..")

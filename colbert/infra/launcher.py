@@ -91,10 +91,13 @@ class Launcher:
 def setup_new_process(callee, port, return_value_queue, config, *args):
     print_memory_stats()
 
-    random.seed(12345)
-    np.random.seed(12345)
-    torch.manual_seed(12345)
-    torch.cuda.manual_seed_all(12345)
+    # seed = 12345
+    seed = 12346
+
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
 
     rank, nranks = config.rank, config.nranks
 

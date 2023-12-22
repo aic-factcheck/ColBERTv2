@@ -2,6 +2,8 @@ import torch
 
 
 def tensorize_triples(query_tokenizer, doc_tokenizer, queries, passages, scores, bsize, nway):
+    assert bsize > 0, bsize # dhonza
+    assert nway > 0, nway   # dhonza
     # assert len(passages) == len(scores) == bsize * nway
     # assert bsize is None or len(queries) % bsize == 0
 

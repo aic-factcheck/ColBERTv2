@@ -1,0 +1,5 @@
+{
+    "index_name": "/mnt/data/ctknews/factcheck/par6/colbertv2/qacg/indices/csnews/bert-base-multilingual-cased/nway32_anserini_balanced_shuf_231126_184912/colbert-best_eval/2bits",
+    "lineno2id_mapping": "/mnt/data/ctknews/factcheck/par6/colbertv2/qacg/paragraphs_lineno2id.json",
+    "port": 8062
+}

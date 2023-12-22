@@ -26,8 +26,14 @@ class Examples:
 
         with open(path) as f:
             for line in f:
-                example = ujson.loads(line)[:nway]
-                examples.append(example)
+                try:
+                    example = ujson.loads(line)[:nway]
+                    examples.append(example)
+                except:
+                    print(path)
+                    print(nway)
+                    print(line)
+                    assert False
 
         return examples
 

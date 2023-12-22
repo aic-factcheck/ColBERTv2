@@ -1,4 +1,4 @@
-name: colbert
+name: colbert_cpu
 channels:
   - pytorch
   - conda-forge
@@ -8,10 +8,12 @@ dependencies:
   - faiss-cpu
   - pip=21.0
   - pytorch-cpu
+  - flask
+  - flask-restx
+  - GitPython
   - pip:
     - bitarray
     - datasets
-    - gitpython
     - ninja
     - scipy
     - spacy

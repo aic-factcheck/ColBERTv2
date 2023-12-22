@@ -97,10 +97,19 @@ class TokenizerSettings:
 
 @dataclass
 class ResourceSettings:
+    wandb_name: str = DefaultVal(None)
+    wandb_project: str = DefaultVal(None)
     checkpoint: str = DefaultVal(None)
     triples: str = DefaultVal(None)
+    eval_triples: str = DefaultVal(None)
+    eval_triples: str = DefaultVal(None)
+    max_eval_triples: int = DefaultVal(None)
+    batches_to_eval: int = DefaultVal(100)
+    early_patience: int = DefaultVal(10)
+    auto_score: bool = DefaultVal(False)
     collection: str = DefaultVal(None)
     queries: str = DefaultVal(None)
+    eval_queries: str = DefaultVal(None)
     index_name: str = DefaultVal(None)
 
 
@@ -120,9 +129,13 @@ class QuerySettings:
 
 @dataclass
 class TrainingSettings:
+    seed: int = DefaultVal(12345)
+
     similarity: str = DefaultVal('cosine')
 
     bsize: int = DefaultVal(32)
+    
+    eval_bsize: int = DefaultVal(64)
 
     accumsteps: int = DefaultVal(1)
 

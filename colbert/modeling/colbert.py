@@ -28,6 +28,9 @@ class ColBERT(BaseColBERT):
                              for w in [symbol, self.raw_tokenizer.encode(symbol, add_special_tokens=False)[0]]}
         self.pad_token = self.raw_tokenizer.pad_token_id
 
+        print(f"ColBERT: self.colbert_config={self.colbert_config}")
+
+
 
     @classmethod
     def try_load_torch_extensions(cls, use_gpu):
@@ -55,6 +58,7 @@ class ColBERT(BaseColBERT):
 
         # Repeat each query encoding for every corresponding document.
         Q_duplicated = Q.repeat_interleave(self.colbert_config.nway, dim=0).contiguous()
+        # print(f"forward: Q_duplicated.size()2= {Q_duplicated.size()}")
         scores = self.score(Q_duplicated, D, D_mask)
 
         if self.colbert_config.use_ib_negatives:
@@ -167,9 +171,14 @@ def colbert_score(Q, D_padded, D_mask, config=ColBERTConfig()):
     if use_gpu:
         Q, D_padded, D_mask = Q.cuda(), D_padded.cuda(), D_mask.cuda()
 
+    # print(f"colbert_score: Q.dim() = {Q.dim()}")
+    # print(f"colbert_score: Q.size() = {Q.size()}")
+    # print(f"colbert_score: D_padded.dim() = {D_padded.dim()}")
+    # print(f"colbert_score: D_padded.size() = {D_padded.size()}")
     assert Q.dim() == 3, Q.size()
     assert D_padded.dim() == 3, D_padded.size()
     assert Q.size(0) in [1, D_padded.size(0)]
+    # assert False
 
     scores = D_padded @ Q.to(dtype=D_padded.dtype).permute(0, 2, 1)
 
