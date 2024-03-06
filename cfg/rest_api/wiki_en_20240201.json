@@ -1,0 +1,5 @@
+{
+    "index_name": "/mnt/data/factcheck/wiki/en/20240201/colbertv2/qacg/indices/sum_cs_en_pl_sk/bert-base-multilingual-cased/nway32_anserini_balanced_shuf_231029_200426/colbert-best_eval/2bits",
+    "lineno2id_mapping": "/mnt/data/factcheck/wiki/en/20240201/paragraphs/enwiki-20240201-paragraphs_lineno2id.json",
+    "port": 8051
+}

@@ -20,7 +20,7 @@ pwd
 ml GCC/11.2.0
 
 export PYTHONPATH=.:$PYTHONPATH
-python scripts/rest_api.py cfg/rest_api/wiki_cs_20230220.json
-
+# python scripts/rest_api.py cfg/rest_api/wiki_cs_20230220.json
+python scripts/rest_api.py cfg/rest_api/wiki_cs_20240201.json
 
 

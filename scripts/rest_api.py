@@ -48,7 +48,9 @@ class Retrieve(Resource):
     def post(self):
         args = parser.parse_args()
         st = time()
-        ids, scores = retriever.retrieve(args["query"], args["k"])
+        query, k = args["query"], args["k"]
+        logger.info(f'RETRIEVE (k={k}): "{query}"')
+        ids, scores = retriever.retrieve(query, k)
         duration_s = time()-st
         ret = {"ids": ids, "scores": scores, "duration_s": duration_s}
         return ret, 200

@@ -1,9 +1,9 @@
 #!/bin/bash
-#SBATCH --time=72:00:00
+#SBATCH --time=4:00:00
 #SBATCH --nodes=1 --ntasks-per-node=1 --cpus-per-task=4
-#SBATCH --partition=amdlong
-#SBATCH --mem=160G
-#SBATCH --out=../logs/rest_colbert_en.%j.out
+#SBATCH --partition=amdfast
+#SBATCH --mem=32G
+#SBATCH --out=../logs/rest_colbert_sk.%j.out
 
 # if PROJECT_DIR is not defined, then expect we are in ${PROJECT_DIR}/slurm
 if [[ -z "${PROJECT_DIR}" ]]; then
@@ -20,7 +20,5 @@ pwd
 ml GCC/11.2.0
 
 export PYTHONPATH=.:$PYTHONPATH
-# python scripts/rest_api.py cfg/rest_api/wiki_en_20230220.json
-python scripts/rest_api.py cfg/rest_api/wiki_en_20240201.json
-
-
+# python scripts/rest_api.py cfg/rest_api/wiki_sk_20240201.json
+python scripts/rest_api.py cfg/rest_api/wiki_sk_20240201_sk_300tokens.json

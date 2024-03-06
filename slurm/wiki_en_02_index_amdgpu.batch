@@ -33,8 +33,11 @@ export PYTHONPATH=.:$PYTHONPATH
 # CFG=cfg/index/wiki_en/index_ev.config.py
 # CFG=cfg/index/wiki_en/index_final.config.py
 # CFG=cfg/index/wiki_en/index_final_enfever.config.py
-CFG=cfg/index/wiki_en/index_final_qacg_sum.config.py
+# default "Pipeline paper model"
+# CFG=cfg/index/wiki_en/index_final_qacg_sum.config.py
 # CFG=cfg/index/wiki_en/index_final_qacg_mix.config.py
 # CFG=cfg/index/wiki_en/index_final_qacg_en.config.py
+# CFG=cfg/index/wiki_en/index_cedmo_qacg_sum.config.py
+CFG=cfg/index/wiki_en/index_cedmo_qacg_en_500tokens.config.py
 python scripts/build_index.py $CFG
 

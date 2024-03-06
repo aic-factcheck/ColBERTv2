@@ -31,8 +31,11 @@ export PYTHONPATH=.:$PYTHONPATH
 # CFG=cfg/index/wiki_sk/index_sum_nway128.config.py
 # CFG=cfg/index/wiki_sk/index_ev.config.py
 # CFG=cfg/index/wiki_sk/index_combined_ev.config.py
-CFG=cfg/index/wiki_sk/index_final_qacg_sum.config.py
+# default "Pipeline paper model"
+# CFG=cfg/index/wiki_sk/index_final_qacg_sum.config.py
 # CFG=cfg/index/wiki_sk/index_final_qacg_mix.config.py
 # CFG=cfg/index/wiki_sk/index_final_qacg_sk.config.py
+# CFG=cfg/index/wiki_sk/index_cedmo_qacg_sum.config.py
+CFG=cfg/index/wiki_sk/index_cedmo_qacg_sk.config.py
 python scripts/build_index.py $CFG
 
